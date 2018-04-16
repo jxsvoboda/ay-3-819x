@@ -30,6 +30,7 @@ sources = \
 	env_shape.vhd \
 	mixer.vhd \
 	noise_gen.vhd \
+	regs.vhd \
 	tone_gen.vhd
 
 objects = $(sources:.vhd=.o)
