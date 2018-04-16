@@ -1,5 +1,5 @@
 --
--- AY-819x Mixer
+-- AY-819x Envelope Shape
 --
 -- Copyright 2018 Jiri Svoboda
 --
@@ -24,25 +24,28 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
-entity mixer is
+entity env_shape is
     port (
-	-- From mixer control register
-	noise_enable : in std_logic;
-	-- From noise generator
-	noise : in std_logic;
-	-- From mixer control register
-	tone_enable : in std_logic;
-	-- From tone generator
-	tone : in std_logic;
-	-- To D/A converter
-	output : out std_logic
+	-- From Envelope Shapy/Cycle Control Register
+	hold : in std_logic;
+	-- From Envelope Shapy/Cycle Control Register
+	alternate : in std_logic;
+	-- From Envelope Shapy/Cycle Control Register
+	attack : in std_logic;
+	-- From Envelope Shapy/Cycle Control Register
+	continue : in std_logic;
+	-- Envelope phase
+	env_phase : in unsigned(5 downto 0);
+	-- Amplitude
+	amp : out unsigned(3 downto 0)
     );
-end mixer;
+end env_shape;
 
-architecture mixer_arch of mixer is
+architecture env_shape_arch of env_shape is
 begin
-    output <=
-	(noise and noise_enable) xor
-	(tone and tone_enable);
-end mixer_arch;
+
+    amp <= env_phase(3 downto 0);
+
+end env_shape_arch;

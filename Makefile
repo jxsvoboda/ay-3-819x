@@ -24,7 +24,12 @@
 
 GHDL = ghdl
 sources = \
-	mixer.vhd
+	env_gen.vhd \
+	env_shape.vhd \
+	mixer.vhd \
+	noise_gen.vhd \
+	tone_gen.vhd
+
 objects = $(sources:.vhd=.o)
 
 all: $(objects)
