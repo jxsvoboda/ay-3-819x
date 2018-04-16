@@ -44,8 +44,52 @@ entity env_shape is
 end env_shape;
 
 architecture env_shape_arch of env_shape is
+    -- '1' means the first EP, '0' is any other
+    signal first : std_logic;
+    -- Bit 0 of Envelope Period
+    signal eper0 : std_logic;
+    -- Direction, '0' is decaying, '1' is attacking
+    signal dir : std_logic;
+    -- Sawtooth amplitude
+    signal sawamp : unsigned(3 downto 0);
+    -- Hold level, '1' is max amplitude, '0' is silence
+    signal holdlvl : std_logic;
+    -- Hold amplitude
+    signal holdamp : unsigned(3 downto 0);
+    -- Continuation amplitude
+    signal contamp : unsigned(3 downto 0);
 begin
 
-    amp <= env_phase(3 downto 0);
+    -- '1' if in the first Envelope Period, '0' otherwise
+    first <= '1' when env_phase(5 downto 4) = "00" else '0';
+    -- Bit 0 of Envelope period (0 for first period, 1 for second, etc. )
+    eper0 <= env_phase(4);
+
+    -- Direction of sawtooth in this Envelope Period
+    --
+    -- Attack flips around the direction
+    -- If alternate is set, directions switches every EP
+    -- '0' is decaying, '1' is attacking
+    dir <= attack xor (eper0 and alternate);
+
+    -- Sawtooth amplitude
+    sawamp <= env_phase(3 downto 0) when attack = '1'
+	else 15 - env_phase(3 downto 0);
+
+    -- If alternate is not set, hold last level, otherwise
+    -- hold the reverse
+    holdlvl <= attack xor alternate;
+
+    -- Hold amplitude
+    holdamp <= "1111" when holdlvl = '1' else "0000";
+
+    -- Current amplitude if in EP > 0
+    contamp <= "0000" when continue = '0' else
+	holdamp when hold = '1' else
+	sawamp;
+
+    -- Output amplitude
+    amp <= sawamp when first = '1' else
+	contamp;
 
 end env_shape_arch;

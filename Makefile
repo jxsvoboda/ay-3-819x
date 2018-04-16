@@ -24,6 +24,7 @@
 
 GHDL = ghdl
 sources = \
+	amp_ctl.vhd \
 	env_gen.vhd \
 	env_shape.vhd \
 	mixer.vhd \
