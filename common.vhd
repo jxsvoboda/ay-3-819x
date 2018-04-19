@@ -28,6 +28,7 @@ use IEEE.numeric_std.all;
 package common is
 
     -- Register array type
-    type rarray_type is array(integer range <>) of unsigned(7 downto 0);
+    type rarray_t is array(integer range <>) of unsigned(7 downto 0);
+    subtype rarray_psg_t is rarray_t(0 to 17);
 
 end common;

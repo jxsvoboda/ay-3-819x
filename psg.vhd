@@ -173,7 +173,12 @@ architecture psg_arch of psg is
     signal amp_lvl_c : unsigned(3 downto 0);
 
     -- Register array
-    signal rarray : rarray_type(0 to 15);
+    signal rarray : rarray_psg_t;
+
+    -- I/O port A input enable
+    signal ien_a : std_logic;
+    -- I/O port B input enable
+    signal ien_b : std_logic;
 
     component amp_ctl is
 	port (
@@ -257,7 +262,7 @@ architecture psg_arch of psg is
     component regdec is
         port (
 	    -- Raw register array
-	    rarray : in rarray_type(0 to 15);
+	    rarray : in rarray_psg_t;
 	    -- Noise Period
 	    noise_period : out unsigned(4 downto 0);
 	    -- Channel A Tone Period
@@ -289,7 +294,11 @@ architecture psg_arch of psg is
 	    -- Channel B fixed amplitude level
 	    amp_lvl_b : out unsigned(3 downto 0);
 	    -- Channel C fixed amplitude level
-	    amp_lvl_c : out unsigned(3 downto 0)
+	    amp_lvl_c : out unsigned(3 downto 0);
+	    -- I/O port A input enable
+	    ien_a : out std_logic;
+	    -- I/O port B input enable
+	    ien_b : out std_logic
 	);
     end component;
 
@@ -310,7 +319,7 @@ architecture psg_arch of psg is
 	    -- A8
 	    a8 : in std_logic;
 	    -- Register array output
-	    rarray_out : out rarray_type(0 to 15)
+	    rarray_out : out rarray_psg_t
 	);
     end component;
 
@@ -444,7 +453,9 @@ begin
 	eg_mode_c => eg_mode_c,
 	amp_lvl_a => amp_lvl_a,
 	amp_lvl_b => amp_lvl_b,
-	amp_lvl_c => amp_lvl_c
+	amp_lvl_c => amp_lvl_c,
+	ien_a => ien_a,
+	ien_b => ien_b
     );
 
     regs_i : regs port map (

@@ -50,8 +50,16 @@ entity regs is
 	na9 : in std_logic;
 	-- A8
 	a8 : in std_logic;
+	-- I/O port A input
+	ioa_in : in unsigned(7 downto 0);
+	-- I/O port A input
+	iob_in : in unsigned(7 downto 0);
+	-- I/O port A output
+	ioa_out : out unsigned(7 downto 0);
+	-- I/O port B output
+	iob_out : out unsigned(7 downto 0);
 	-- Register array
-	rarray_out : out rarray_type(0 to 15)
+	rarray_out : out rarray_psg_t
     );
 end regs;
 
@@ -62,14 +70,23 @@ architecture regs_arch of regs is
     -- Selected register address
     signal regaddr : unsigned(3 downto 0);
     -- Array of sixteen 8-bit registers
-    signal rarray : rarray_type(0 to 15);
+    signal rarray : rarray_psg_t;
+
+    -- I/O port input enable
+    signal ien_a : std_logic;
+    signal ien_b : std_logic;
 
 begin
     -- High order address bits must be 10-0000 to select chip
     chipsel <= na9 and not a8 and
 	not daddr(7) and not daddr(6) and not daddr(5) and not daddr(4);
 
+    -- Register array output
     rarray_out <= rarray;
+
+    -- I/O port input enable
+    ien_a <= not rarray(7)(6);
+    ien_b <= not rarray(7)(7);
 
     -- Address latching
     -- XXX is this supposed to be synchronous or asynchronous?
@@ -84,10 +101,22 @@ begin
     -- Writing data
     -- XXX is this supposed to be synchronous or asynchronous?
     process(clock)
+	variable do_write : boolean;
     begin
 	if rising_edge(clock) and chipsel = '1' and write = '1' then
-	    -- Write data to the register
-	    rarray(to_integer(regaddr)) <= daddr;
+	    -- If input is enabled then we may not write to I/O registers
+	    if regaddr = "10000" then
+		do_write := ien_a = '0';
+	    elsif regaddr = "10001" then
+		do_write := ien_b = '0';
+	    else
+		do_write := true;
+	    end if;
+
+	    if do_write then
+		-- Write data to the register
+		rarray(to_integer(regaddr)) <= daddr;
+	    end if;
 	end if;
     end process;
 
@@ -97,11 +126,38 @@ begin
     begin
 	if rising_edge(clock) then
 	    if chipsel = '1' and read = '1' then
-		    -- Read data from the register
-		    daddr <= rarray(to_integer(regaddr));
+		-- Read data from the register
+		daddr <= rarray(to_integer(regaddr));
 	    else
-		    -- Stop driving daddr
-		    daddr <= (others => 'Z');
+		-- Stop driving daddr
+		daddr <= (others => 'Z');
+	    end if;
+	end if;
+    end process;
+
+    -- I/O port input / output
+    -- XXX is this supposed to be synchronous or asynchronous?
+    process(clock)
+    begin
+	if rising_edge(clock) then
+	    -- I/O port A
+	    if ien_a = '1' then
+		-- Read input to R16
+		rarray(16) <= ioa_in;
+		-- Provide internal pull-up on all pins
+		ioa_out <= (others => 'H');
+	    else
+		ioa_out <= rarray(16);
+	    end if;
+
+	    -- I/O port B
+	    if ien_b = '1' then
+		-- Read input to R17
+		rarray(17) <= iob_in;
+		-- Provide internal pull-up on all pins
+		ioa_out <= (others => 'H');
+	    else
+		ioa_out <= rarray(17);
 	    end if;
 	end if;
     end process;

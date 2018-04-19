@@ -34,7 +34,7 @@ use work.common.all;
 entity regdec is
     port (
 	-- Raw register array
-	rarray : in rarray_type(0 to 15);
+	rarray : in rarray_psg_t;
 	-- Noise Period
 	noise_period : out unsigned(4 downto 0);
 	-- Channel A Tone Period
@@ -66,7 +66,11 @@ entity regdec is
 	-- Channel B fixed amplitude level
 	amp_lvl_b : out unsigned(3 downto 0);
 	-- Channel C fixed amplitude level
-	amp_lvl_c : out unsigned(3 downto 0)
+	amp_lvl_c : out unsigned(3 downto 0);
+	-- I/O port A input enable
+	ien_a : out std_logic;
+	-- I/O port B input enable
+	ien_b : out std_logic
     );
 end regdec;
 
@@ -87,6 +91,9 @@ begin
     tone_enable_a <= not rarray(7)(0);
     tone_enable_b <= not rarray(7)(1);
     tone_enable_c <= not rarray(7)(2);
+
+    ien_a <= not rarray(7)(6);
+    ien_b <= not rarray(7)(7);
 
     eg_mode_a <= rarray(10)(4);
     eg_mode_b <= rarray(11)(4);
