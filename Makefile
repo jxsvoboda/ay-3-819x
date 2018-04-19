@@ -23,22 +23,31 @@
 #
 
 GHDL = ghdl
-sources = \
+sources_dep = \
 	amp_ctl.vhd \
 	bcdec.vhd \
 	env_gen.vhd \
 	env_shape.vhd \
 	mixer.vhd \
 	noise_gen.vhd \
+	psg.vhd \
+	regdec.vhd \
 	regs.vhd \
 	tone_gen.vhd
 
+sources = \
+	common.vhd \
+	$(sources_dep)
+
+objects_dep = $(sources_dep:.vhd=.o)
 objects = $(sources:.vhd=.o)
 
 all: $(objects)
 
 %.o: %.vhd
 	$(GHDL) -a $<
+
+$(objects_dep): common.o
 
 clean:
 	rm -f $(objects) work-obj93.cf

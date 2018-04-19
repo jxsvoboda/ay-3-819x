@@ -32,6 +32,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use work.common.all;
 
 entity regs is
     port (
@@ -48,7 +49,9 @@ entity regs is
 	-- nA9
 	na9 : in std_logic;
 	-- A8
-	a8 : in std_logic
+	a8 : in std_logic;
+	-- Register array
+	rarray_out : out rarray_type(0 to 15)
     );
 end regs;
 
@@ -58,7 +61,6 @@ architecture regs_arch of regs is
     signal chipsel : std_logic;
     -- Selected register address
     signal regaddr : unsigned(3 downto 0);
-    type rarray_type is array(integer range <>) of unsigned(7 downto 0);
     -- Array of sixteen 8-bit registers
     signal rarray : rarray_type(0 to 15);
 
@@ -66,6 +68,8 @@ begin
     -- High order address bits must be 10-0000 to select chip
     chipsel <= na9 and not a8 and
 	not daddr(7) and not daddr(6) and not daddr(5) and not daddr(4);
+
+    rarray_out <= rarray;
 
     -- Address latching
     -- XXX is this supposed to be synchronous or asynchronous?
