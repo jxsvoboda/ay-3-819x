@@ -51,7 +51,7 @@ entity psg is
 	-- Input/output B
 	iob : inout unsigned(7 downto 0);
 	-- Chip select
-	csel : in std_logic
+	ncsel : in std_logic
     );
 end psg;
 
@@ -308,6 +308,8 @@ architecture psg_arch of psg is
 	    clock : in std_logic;
 	    -- Data/adress
 	    daddr : inout unsigned(7 downto 0);
+	    -- Chip select
+	    ncsel : in std_logic;
 	    -- Address latch
 	    alatch : in std_logic;
 	    -- Write data
@@ -461,6 +463,7 @@ begin
     regs_i : regs port map (
 	clock => clock,
 	daddr => daddr,
+	ncsel => ncsel,
 	alatch => alatch,
 	write => write,
 	read => read,

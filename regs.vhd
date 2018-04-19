@@ -40,6 +40,8 @@ entity regs is
 	clock : in std_logic;
 	-- Data/adress
 	daddr : inout unsigned(7 downto 0);
+	-- Chip select
+	ncsel : in std_logic;
 	-- Address latch
 	alatch : in std_logic;
 	-- Write data
@@ -65,8 +67,10 @@ end regs;
 
 architecture regs_arch of regs is
 
-    -- Chip select
-    signal chipsel : std_logic;
+    -- Address is valid
+    signal valid_addr : std_logic;
+    -- Chip is selected
+    signal chipsel: std_logic;
     -- Selected register address
     signal regaddr : unsigned(3 downto 0);
     -- Array of sixteen 8-bit registers
@@ -78,8 +82,11 @@ architecture regs_arch of regs is
 
 begin
     -- High order address bits must be 10-0000 to select chip
-    chipsel <= na9 and not a8 and
+    valid_addr <= na9 and not a8 and
 	not daddr(7) and not daddr(6) and not daddr(5) and not daddr(4);
+
+    -- Chip is selected and address is valid
+    chipsel <= valid_addr and not ncsel;
 
     -- Register array output
     rarray_out <= rarray;
