@@ -27,8 +27,22 @@ use IEEE.numeric_std.all;
 
 package common is
 
+    -- Data/address
+    subtype daddr_t is unsigned(7 downto 0);
     -- Register array type
-    type rarray_t is array(integer range <>) of unsigned(7 downto 0);
+    type rarray_t is array(integer range <>) of daddr_t;
+    -- AY-3-819x register array
     subtype rarray_psg_t is rarray_t(0 to 17);
+
+    -- AY amplitude level (0 to 15)
+    subtype amp_lvl_t is unsigned(3 downto 0);
+    -- AY tone period (12 bits)
+    subtype tone_period_t is unsigned(11 downto 0);
+    -- AY noise period (5 bits)
+    subtype noise_period_t is unsigned(4 downto 0);
+    -- AY envelope period (16 bits)
+    subtype env_period_t is unsigned(15 downto 0);
+    -- AY envelope phase (00-0000 to 10-1111)
+    subtype env_phase_t is unsigned(5 downto 0);
 
 end common;

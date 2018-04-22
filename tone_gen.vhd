@@ -25,6 +25,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use work.common.all;
 
 entity tone_gen is
     port (
@@ -33,7 +34,7 @@ entity tone_gen is
 	-- Reset signal
 	reset : in std_logic;
 	-- From Coarse/Fine Tune Registers
-	tone_period : in unsigned(11 downto 0);
+	tone_period : in tone_period_t;
 	-- To mixer
 	output : out std_logic
     );
@@ -43,7 +44,7 @@ architecture tone_gen_arch of tone_gen is
     -- Clock pre-division counter
     signal prediv_cnt : unsigned(3 downto 0);
     -- Tone counter
-    signal tone_cnt : unsigned(11 downto 0);
+    signal tone_cnt : tone_period_t;
     -- Tone state
     signal tone_state : std_logic;
 begin

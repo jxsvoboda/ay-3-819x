@@ -30,7 +30,7 @@ use work.common.all;
 entity psg is
     port (
 	-- Data/address
-	daddr : inout unsigned(7 downto 0);
+	daddr : inout daddr_t;
         -- nA9
 	na9 : in std_logic;
 	-- A8
@@ -47,9 +47,9 @@ entity psg is
 	bc1 : in std_logic;
 	-- XXX Analog channels A, B, C
 	-- Input/output A
-	ioa : inout unsigned(7 downto 0);
+	ioa : inout daddr_t;
 	-- Input/output B
-	iob : inout unsigned(7 downto 0);
+	iob : inout daddr_t;
 	-- Chip select
 	ncsel : in std_logic
     );
@@ -68,22 +68,22 @@ architecture psg_arch of psg is
     signal noise : std_logic;
 
     -- Noise period
-    signal noise_period : unsigned(4 downto 0);
+    signal noise_period : noise_period_t;
 
     -- Tone generator A output
     signal tone_a : std_logic;
     -- Tone period A
-    signal tone_period_a : unsigned(11 downto 0);
+    signal tone_period_a : tone_period_t;
 
     -- Tone generator B output
     signal tone_b : std_logic;
     -- Tone period C
-    signal tone_period_b : unsigned(11 downto 0);
+    signal tone_period_b : tone_period_t;
 
     -- Tone generator C output
     signal tone_c : std_logic;
     -- Tone period C
-    signal tone_period_c : unsigned(11 downto 0);
+    signal tone_period_c : tone_period_t;
 
     -- Channel A noise enable
     signal noise_enable_a : std_logic;
@@ -113,7 +113,7 @@ architecture psg_arch of psg is
     signal mix_c : std_logic;
 
     -- Envelope Period
-    signal env_period : unsigned(15 downto 0);
+    signal env_period : env_period_t;
     -- Continue Envelope
     signal continue : std_logic;
     -- Attack Envelope
@@ -123,14 +123,14 @@ architecture psg_arch of psg is
     -- Hold Envelope
     signal hold : std_logic;
     -- Envelope
-    signal env : unsigned(3 downto 0);
+    signal env : amp_lvl_t;
 
     -- Channel A output amplitude
-    signal amp_a : unsigned(3 downto 0);
+    signal amp_a : amp_lvl_t;
     -- Channel B output amplitude
-    signal amp_b : unsigned(3 downto 0);
+    signal amp_b : amp_lvl_t;
     -- Channel C output amplitude
-    signal amp_c : unsigned(3 downto 0);
+    signal amp_c : amp_lvl_t;
 
     -- Channel A envelope mode
     signal eg_mode_a : std_logic;
@@ -140,11 +140,11 @@ architecture psg_arch of psg is
     signal eg_mode_c : std_logic;
 
     -- Channel A fixed amplitude level
-    signal amp_lvl_a : unsigned(3 downto 0);
+    signal amp_lvl_a : amp_lvl_t;
     -- Channel B fixed amplitude level
-    signal amp_lvl_b : unsigned(3 downto 0);
+    signal amp_lvl_b : amp_lvl_t;
     -- Channel C fixed amplitude level
-    signal amp_lvl_c : unsigned(3 downto 0);
+    signal amp_lvl_c : amp_lvl_t;
 
     -- Register array
     signal rarray : rarray_psg_t;
@@ -159,11 +159,11 @@ architecture psg_arch of psg is
 	    -- From amplitude control register
 	    eg_mode : in std_logic;
 	    -- From amplitude control register
-	    amp_lvl : in unsigned(3 downto 0);
+	    amp_lvl : in amp_lvl_t;
 	    -- From envelope generator
-	    eg_lvl : in unsigned(3 downto 0);
+	    eg_lvl : in amp_lvl_t;
 	    -- To D/A converter
-	    output : out unsigned(3 downto 0)
+	    output : out amp_lvl_t
 	);
     end component;
 
@@ -191,7 +191,7 @@ architecture psg_arch of psg is
 	    -- Reset signal
 	    reset : in std_logic;
 	    -- From Envelope Coarse/Fine Tune Registers
-	    env_period : in unsigned(15 downto 0);
+	    env_period : in env_period_t;
 	    -- From Envelope Shapy/Cycle Control Register
 	    continue : in std_logic;
 	    -- From Envelope Shapy/Cycle Control Register
@@ -201,7 +201,7 @@ architecture psg_arch of psg is
 	    -- From Envelope Shapy/Cycle Control Register
 	    hold : in std_logic;
 	    -- To amplitude control
-	    output : out unsigned(3 downto 0)
+	    output : out amp_lvl_t
 	);
     end component;
 
@@ -227,7 +227,7 @@ architecture psg_arch of psg is
 	    -- Reset signal
 	    reset : in std_logic;
 	    -- From noise generator control register
-	    noise_period : in unsigned(4 downto 0);
+	    noise_period : in noise_period_t;
 	    -- To mixer
 	    output : out std_logic
 	);
@@ -238,13 +238,13 @@ architecture psg_arch of psg is
 	    -- Raw register array
 	    rarray : in rarray_psg_t;
 	    -- Noise Period
-	    noise_period : out unsigned(4 downto 0);
+	    noise_period : out noise_period_t;
 	    -- Channel A Tone Period
-	    tone_period_a : out unsigned(11 downto 0);
+	    tone_period_a : out tone_period_t;
 	    -- Channel B Tone Period
-	    tone_period_b : out unsigned(11 downto 0);
+	    tone_period_b : out tone_period_t;
 	    -- Channel C Tone Period
-	    tone_period_c : out unsigned(11 downto 0);
+	    tone_period_c : out tone_period_t;
 	    -- Channel A noise enable
 	    noise_enable_a : out std_logic;
 	    -- Channel B noise enable
@@ -264,11 +264,11 @@ architecture psg_arch of psg is
 	    -- Channel C envelope mode
 	    eg_mode_c : out std_logic;
 	    -- Channel A fixed amplitude level
-	    amp_lvl_a : out unsigned(3 downto 0);
+	    amp_lvl_a : out amp_lvl_t;
 	    -- Channel B fixed amplitude level
-	    amp_lvl_b : out unsigned(3 downto 0);
+	    amp_lvl_b : out amp_lvl_t;
 	    -- Channel C fixed amplitude level
-	    amp_lvl_c : out unsigned(3 downto 0);
+	    amp_lvl_c : out amp_lvl_t;
 	    -- I/O port A input enable
 	    ien_a : out std_logic;
 	    -- I/O port B input enable
@@ -289,7 +289,7 @@ architecture psg_arch of psg is
 	    -- Clock
 	    clock : in std_logic;
 	    -- Data/adress
-	    daddr : inout unsigned(7 downto 0);
+	    daddr : inout daddr_t;
 	    -- Chip select
 	    ncsel : in std_logic;
 	    -- Address latch
@@ -314,7 +314,7 @@ architecture psg_arch of psg is
 	    -- Reset signal
 	    reset : in std_logic;
 	    -- From Coarse/Fine Tune Registers
-	    tone_period : in unsigned(11 downto 0);
+	    tone_period : in tone_period_t;
 	    -- To mixer
 	    output : out std_logic
 	);

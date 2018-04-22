@@ -25,6 +25,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use work.common.all;
 
 entity noise_gen is
     port (
@@ -33,7 +34,7 @@ entity noise_gen is
 	-- Reset signal
 	reset : in std_logic;
 	-- From noise generator control register
-	noise_period : in unsigned(4 downto 0);
+	noise_period : in noise_period_t;
 	-- To mixer
 	output : out std_logic
     );
@@ -43,7 +44,7 @@ architecture noise_gen_arch of noise_gen is
     -- Clock pre-division counter
     signal prediv_cnt : unsigned(3 downto 0);
     -- Noise counter
-    signal noise_cnt : unsigned(4 downto 0);
+    signal noise_cnt : noise_period_t;
     -- Linear Feedback Shift Register
     signal lfsr : std_logic_vector(1 to 16);
 begin

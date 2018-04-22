@@ -25,17 +25,18 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use work.common.all;
 
 entity amp_ctl is
     port (
 	-- From amplitude control register
 	eg_mode : in std_logic;
 	-- From amplitude control register
-	amp_lvl : in unsigned(3 downto 0);
+	amp_lvl : in amp_lvl_t;
 	-- From envelope generator
-	eg_lvl : in unsigned(3 downto 0);
+	eg_lvl : in amp_lvl_t;
 	-- To D/A converter
-	output : out unsigned(3 downto 0)
+	output : out amp_lvl_t
     );
 end amp_ctl;
 

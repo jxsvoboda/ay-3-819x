@@ -39,7 +39,7 @@ entity regs is
 	-- Clock
 	clock : in std_logic;
 	-- Data/adress
-	daddr : inout unsigned(7 downto 0);
+	daddr : inout daddr_t;
 	-- Chip select
 	ncsel : in std_logic;
 	-- Address latch
@@ -53,13 +53,13 @@ entity regs is
 	-- A8
 	a8 : in std_logic;
 	-- I/O port A input
-	ioa_in : in unsigned(7 downto 0);
+	ioa_in : in daddr_t;
 	-- I/O port A input
-	iob_in : in unsigned(7 downto 0);
+	iob_in : in daddr_t;
 	-- I/O port A output
-	ioa_out : out unsigned(7 downto 0);
+	ioa_out : out daddr_t;
 	-- I/O port B output
-	iob_out : out unsigned(7 downto 0);
+	iob_out : out daddr_t;
 	-- Register array
 	rarray_out : out rarray_psg_t
     );

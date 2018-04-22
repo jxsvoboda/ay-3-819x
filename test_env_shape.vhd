@@ -25,6 +25,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use work.common.all;
 use std.textio.all;
 
 entity test_env_shape is
@@ -42,23 +43,23 @@ architecture test_env_shape_arch of test_env_shape is
 	    -- From Envelope Shapy/Cycle Control Register
 	    hold : in std_logic;
 	    -- Envelope phase
-	    env_phase : in unsigned(5 downto 0);
+	    env_phase : in env_phase_t;
 	    -- Amplitude
-	    amp : out unsigned(3 downto 0)
+	    amp : out amp_lvl_t
 	);
     end component;
 
-    signal env_phase : unsigned(5 downto 0);
-    signal out00xx : unsigned(3 downto 0);
-    signal out01xx : unsigned(3 downto 0);
-    signal out1000 : unsigned(3 downto 0);
-    signal out1001 : unsigned(3 downto 0);
-    signal out1010 : unsigned(3 downto 0);
-    signal out1011 : unsigned(3 downto 0);
-    signal out1100 : unsigned(3 downto 0);
-    signal out1101 : unsigned(3 downto 0);
-    signal out1110 : unsigned(3 downto 0);
-    signal out1111 : unsigned(3 downto 0);
+    signal env_phase : env_phase_t;
+    signal out00xx : amp_lvl_t;
+    signal out01xx : amp_lvl_t;
+    signal out1000 : amp_lvl_t;
+    signal out1001 : amp_lvl_t;
+    signal out1010 : amp_lvl_t;
+    signal out1011 : amp_lvl_t;
+    signal out1100 : amp_lvl_t;
+    signal out1101 : amp_lvl_t;
+    signal out1110 : amp_lvl_t;
+    signal out1111 : amp_lvl_t;
 begin
 
     process

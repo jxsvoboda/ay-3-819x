@@ -36,13 +36,13 @@ entity regdec is
 	-- Raw register array
 	rarray : in rarray_psg_t;
 	-- Noise Period
-	noise_period : out unsigned(4 downto 0);
+	noise_period : out noise_period_t;
 	-- Channel A Tone Period
-	tone_period_a : out unsigned(11 downto 0);
+	tone_period_a : out tone_period_t;
 	-- Channel B Tone Period
-	tone_period_b : out unsigned(11 downto 0);
+	tone_period_b : out tone_period_t;
 	-- Channel C Tone Period
-	tone_period_c : out unsigned(11 downto 0);
+	tone_period_c : out tone_period_t;
 	-- Channel A noise enable
 	noise_enable_a : out std_logic;
 	-- Channel B noise enable
@@ -62,17 +62,17 @@ entity regdec is
 	-- Channel C envelope mode
 	eg_mode_c : out std_logic;
 	-- Channel A fixed amplitude level
-	amp_lvl_a : out unsigned(3 downto 0);
+	amp_lvl_a : out amp_lvl_t;
 	-- Channel B fixed amplitude level
-	amp_lvl_b : out unsigned(3 downto 0);
+	amp_lvl_b : out amp_lvl_t;
 	-- Channel C fixed amplitude level
-	amp_lvl_c : out unsigned(3 downto 0);
+	amp_lvl_c : out amp_lvl_t;
 	-- I/O port A input enable
 	ien_a : out std_logic;
 	-- I/O port B input enable
 	ien_b : out std_logic;
 	-- Envelope Period
-	env_period : out unsigned(15 downto 0);
+	env_period : out env_period_t;
 	-- Continue envelope
 	continue : out std_logic;
 	-- Attack envelope

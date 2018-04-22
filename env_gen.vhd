@@ -25,6 +25,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use work.common.all;
 
 entity env_gen is
     port (
@@ -33,7 +34,7 @@ entity env_gen is
 	-- Reset signal
 	reset : in std_logic;
 	-- From Envelope Coarse/Fine Tune Registers
-	env_period : in unsigned(15 downto 0);
+	env_period : in env_period_t;
 	-- From Envelope Shapy/Cycle Control Register
 	hold : in std_logic;
 	-- From Envelope Shapy/Cycle Control Register
@@ -43,7 +44,7 @@ entity env_gen is
 	-- From Envelope Shapy/Cycle Control Register
 	continue : in std_logic;
 	-- To amplitude control
-	output : out unsigned(3 downto 0)
+	output : out amp_lvl_t
     );
 end env_gen;
 
@@ -59,18 +60,18 @@ architecture env_gen_arch of env_gen is
     	    -- From Envelope Shapy/Cycle Control Register
 	    hold : in std_logic;
 	    -- Envelope phase
-	    env_phase : in unsigned(5 downto 0);
+	    env_phase : in env_phase_t;
 	    -- Amplitude
-	    amp : out unsigned(3 downto 0)
+	    amp : out amp_lvl_t
 	);
     end component;
 
     -- Clock pre-division counter
     signal prediv_cnt : unsigned(7 downto 0);
     -- Envelope counter
-    signal env_cnt : unsigned(15 downto 0);
+    signal env_cnt : env_period_t;
     -- Envelope phase
-    signal env_phase : unsigned(5 downto 0);
+    signal env_phase : env_phase_t;
 begin
 
     -- Pre-division counting
@@ -99,7 +100,7 @@ begin
 
     -- Envelope phase counting
     process(clock, reset)
-	variable next_phase : unsigned(5 downto 0);
+	variable next_phase : env_phase_t;
     begin
 	if reset = '1' then
 	    env_phase <= (others => '0');

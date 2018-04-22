@@ -25,6 +25,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use work.common.all;
 
 entity env_shape is
     port (
@@ -37,9 +38,9 @@ entity env_shape is
 	-- From Envelope Shapy/Cycle Control Register
 	hold : in std_logic;
 	-- Envelope phase
-	env_phase : in unsigned(5 downto 0);
+	env_phase : in env_phase_t;
 	-- Amplitude
-	amp : out unsigned(3 downto 0)
+	amp : out amp_lvl_t
     );
 end env_shape;
 
@@ -51,13 +52,13 @@ architecture env_shape_arch of env_shape is
     -- Direction, '0' is decaying, '1' is attacking
     signal dir : std_logic;
     -- Sawtooth amplitude
-    signal sawamp : unsigned(3 downto 0);
+    signal sawamp : amp_lvl_t;
     -- Hold level, '1' is max amplitude, '0' is silence
     signal holdlvl : std_logic;
     -- Hold amplitude
-    signal holdamp : unsigned(3 downto 0);
+    signal holdamp : amp_lvl_t;
     -- Continuation amplitude
-    signal contamp : unsigned(3 downto 0);
+    signal contamp : amp_lvl_t;
 begin
 
     -- '1' if in the first Envelope Period, '0' otherwise
