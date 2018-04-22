@@ -70,7 +70,17 @@ entity regdec is
 	-- I/O port A input enable
 	ien_a : out std_logic;
 	-- I/O port B input enable
-	ien_b : out std_logic
+	ien_b : out std_logic;
+	-- Envelope Period
+	env_period : out unsigned(15 downto 0);
+	-- Continue envelope
+	continue : out std_logic;
+	-- Attack envelope
+	attack : out std_logic;
+	-- Alternate envelope
+	alternate : out std_logic;
+	-- Hold envelope
+	hold : out std_logic
     );
 end regdec;
 
@@ -102,5 +112,12 @@ begin
     amp_lvl_a <= rarray(10)(3 downto 0);
     amp_lvl_b <= rarray(11)(3 downto 0);
     amp_lvl_c <= rarray(12)(3 downto 0);
+
+    env_period <= rarray(14) & rarray(13);
+
+    continue <= rarray(15)(3);
+    attack <= rarray(15)(2);
+    alternate <= rarray(15)(1);
+    hold <= rarray(15)(0);
 
 end regdec_arch;

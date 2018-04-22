@@ -112,44 +112,18 @@ architecture psg_arch of psg is
     -- Mixed channel C
     signal mix_c : std_logic;
 
-    -- Channel A Envelope Period
-    signal env_period_a : unsigned(15 downto 0);
-    -- Channel A Continue Envelope
-    signal continue_a : std_logic;
-    -- Channel A Attack Envelope
-    signal attack_a : std_logic;
-    -- Channel A Alternate Envelope
-    signal alternate_a : std_logic;
-    -- Channel A Hold Envelope
-    signal hold_a : std_logic;
-    -- Channel A Envelope
-    signal env_a : unsigned(3 downto 0);
-
-    -- Channel B Envelope Period
-    signal env_period_b : unsigned(15 downto 0);
-    -- Channel B Continue Envelope
-    signal continue_b : std_logic;
-    -- Channel B Attack Envelope
-    signal attack_b : std_logic;
-    -- Channel B Alternate Envelope
-    signal alternate_b : std_logic;
-    -- Channel B Hold Envelope
-    signal hold_b : std_logic;
-    -- Channel B Envelope
-    signal env_b : unsigned(3 downto 0);
-
-    -- Channel C Envelope Period
-    signal env_period_c : unsigned(15 downto 0);
-    -- Channel C Continue Envelope
-    signal continue_c : std_logic;
-    -- Channel C Attack Envelope
-    signal attack_c : std_logic;
-    -- Channel C Alternate Envelope
-    signal alternate_c : std_logic;
-    -- Channel C Hold Envelope
-    signal hold_c : std_logic;
-    -- Channel C Envelope
-    signal env_c : unsigned(3 downto 0);
+    -- Envelope Period
+    signal env_period : unsigned(15 downto 0);
+    -- Continue Envelope
+    signal continue : std_logic;
+    -- Attack Envelope
+    signal attack : std_logic;
+    -- Alternate Envelope
+    signal alternate : std_logic;
+    -- Hold Envelope
+    signal hold : std_logic;
+    -- Envelope
+    signal env : unsigned(3 downto 0);
 
     -- Channel A output amplitude
     signal amp_a : unsigned(3 downto 0);
@@ -298,7 +272,15 @@ architecture psg_arch of psg is
 	    -- I/O port A input enable
 	    ien_a : out std_logic;
 	    -- I/O port B input enable
-	    ien_b : out std_logic
+	    ien_b : out std_logic;
+	    -- Continue envelope
+	    continue : out std_logic;
+	    -- Attack envelope
+	    attack : out std_logic;
+	    -- Alternate envelope
+	    alternate : out std_logic;
+	    -- Hold envelope
+	    hold : out std_logic
 	);
     end component;
 
@@ -344,7 +326,7 @@ begin
     amp_ctl_a : amp_ctl port map (
 	eg_mode => eg_mode_a,
 	amp_lvl => amp_lvl_a,
-	eg_lvl => env_a,
+	eg_lvl => env,
 	output => amp_a
     );
 
@@ -352,7 +334,7 @@ begin
     amp_ctl_b : amp_ctl port map (
 	eg_mode => eg_mode_b,
 	amp_lvl => amp_lvl_b,
-	eg_lvl => env_b,
+	eg_lvl => env,
 	output => amp_b
     );
 
@@ -360,7 +342,7 @@ begin
     amp_ctl_c : amp_ctl port map (
 	eg_mode => eg_mode_c,
 	amp_lvl => amp_lvl_c,
-	eg_lvl => env_c,
+	eg_lvl => env,
 	output => amp_c
     );
 
@@ -374,37 +356,16 @@ begin
 	read => read
     );
 
-    env_gen_a : env_gen port map (
+    -- Envelope Generator
+    env_gen_i : env_gen port map (
 	clock => clock,
 	reset => reset,
-	env_period => env_period_a,
-	continue => continue_a,
-	attack => attack_a,
-	alternate => alternate_a,
-	hold => hold_a,
-	output => env_a
-    );
-
-    env_gen_b : env_gen port map (
-	clock => clock,
-	reset => reset,
-	env_period => env_period_b,
-	continue => continue_b,
-	attack => attack_b,
-	alternate => alternate_b,
-	hold => hold_b,
-	output => env_b
-    );
-
-    env_gen_c : env_gen port map (
-	clock => clock,
-	reset => reset,
-	env_period => env_period_c,
-	continue => continue_c,
-	attack => attack_c,
-	alternate => alternate_c,
-	hold => hold_c,
-	output => env_c
+	env_period => env_period,
+	continue => continue,
+	attack => attack,
+	alternate => alternate,
+	hold => hold,
+	output => env
     );
 
     mixer_a : mixer port map (
