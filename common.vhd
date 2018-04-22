@@ -23,6 +23,7 @@
 --
 
 library IEEE;
+use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 package common is
@@ -44,5 +45,13 @@ package common is
     subtype env_period_t is unsigned(15 downto 0);
     -- AY envelope phase (00-0000 to 10-1111)
     subtype env_phase_t is unsigned(5 downto 0);
+
+    -- Envelope shape
+    type env_shape_t is record
+	continue : std_logic;
+	attack : std_logic;
+	alternate : std_logic;
+	hold : std_logic;
+    end record;
 
 end common;

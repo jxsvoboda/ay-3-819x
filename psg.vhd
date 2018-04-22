@@ -114,14 +114,8 @@ architecture psg_arch of psg is
 
     -- Envelope Period
     signal env_period : env_period_t;
-    -- Continue Envelope
-    signal continue : std_logic;
-    -- Attack Envelope
-    signal attack : std_logic;
-    -- Alternate Envelope
-    signal alternate : std_logic;
-    -- Hold Envelope
-    signal hold : std_logic;
+    -- Envelope shape
+    signal shape : env_shape_t;
     -- Envelope
     signal env : amp_lvl_t;
 
@@ -193,13 +187,7 @@ architecture psg_arch of psg is
 	    -- From Envelope Coarse/Fine Tune Registers
 	    env_period : in env_period_t;
 	    -- From Envelope Shapy/Cycle Control Register
-	    continue : in std_logic;
-	    -- From Envelope Shapy/Cycle Control Register
-	    attack : in std_logic;
-	    -- From Envelope Shapy/Cycle Control Register
-	    alternate : in std_logic;
-	    -- From Envelope Shapy/Cycle Control Register
-	    hold : in std_logic;
+	    shape : in env_shape_t;
 	    -- To amplitude control
 	    output : out amp_lvl_t
 	);
@@ -273,14 +261,8 @@ architecture psg_arch of psg is
 	    ien_a : out std_logic;
 	    -- I/O port B input enable
 	    ien_b : out std_logic;
-	    -- Continue envelope
-	    continue : out std_logic;
-	    -- Attack envelope
-	    attack : out std_logic;
-	    -- Alternate envelope
-	    alternate : out std_logic;
-	    -- Hold envelope
-	    hold : out std_logic
+	    -- Envelope shape
+	    shape : out env_shape_t
 	);
     end component;
 
@@ -361,10 +343,7 @@ begin
 	clock => clock,
 	reset => reset,
 	env_period => env_period,
-	continue => continue,
-	attack => attack,
-	alternate => alternate,
-	hold => hold,
+	shape => shape,
 	output => env
     );
 

@@ -74,13 +74,7 @@ entity regdec is
 	-- Envelope Period
 	env_period : out env_period_t;
 	-- Continue envelope
-	continue : out std_logic;
-	-- Attack envelope
-	attack : out std_logic;
-	-- Alternate envelope
-	alternate : out std_logic;
-	-- Hold envelope
-	hold : out std_logic
+	shape : out env_shape_t
     );
 end regdec;
 
@@ -115,9 +109,9 @@ begin
 
     env_period <= rarray(14) & rarray(13);
 
-    continue <= rarray(15)(3);
-    attack <= rarray(15)(2);
-    alternate <= rarray(15)(1);
-    hold <= rarray(15)(0);
+    shape.continue <= rarray(15)(3);
+    shape.attack <= rarray(15)(2);
+    shape.alternate <= rarray(15)(1);
+    shape.hold <= rarray(15)(0);
 
 end regdec_arch;

@@ -36,13 +36,7 @@ entity env_gen is
 	-- From Envelope Coarse/Fine Tune Registers
 	env_period : in env_period_t;
 	-- From Envelope Shapy/Cycle Control Register
-	hold : in std_logic;
-	-- From Envelope Shapy/Cycle Control Register
-	alternate : in std_logic;
-	-- From Envelope Shapy/Cycle Control Register
-	attack : in std_logic;
-	-- From Envelope Shapy/Cycle Control Register
-	continue : in std_logic;
+	shape : in env_shape_t;
 	-- To amplitude control
 	output : out amp_lvl_t
     );
@@ -52,13 +46,7 @@ architecture env_gen_arch of env_gen is
     component env_shape is
 	port (
 	    -- From Envelope Shapy/Cycle Control Register
-	    continue : in std_logic;
-	    -- From Envelope Shapy/Cycle Control Register
-	    attack : in std_logic;
-	    -- From Envelope Shapy/Cycle Control Register
-	    alternate : in std_logic;
-    	    -- From Envelope Shapy/Cycle Control Register
-	    hold : in std_logic;
+	    shape : in env_shape_t;
 	    -- Envelope phase
 	    env_phase : in env_phase_t;
 	    -- Amplitude
@@ -122,11 +110,8 @@ begin
 
     -- Generate envelope shape and send resulting amplitude to output
     eshape : env_shape port map (
-	-- Take hold/alternate/attack/continue from our input ports
-	continue => continue,
-	attack => attack,
-	alternate => alternate,
-	hold => hold,
+	-- Take shape from our input ports
+	shape => shape,
 	-- Take env_phase from the phase counter
 	env_phase => env_phase,
 	-- Pass amplitude to output

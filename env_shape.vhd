@@ -30,13 +30,7 @@ use work.common.all;
 entity env_shape is
     port (
 	-- From Envelope Shapy/Cycle Control Register
-	continue : in std_logic;
-	-- From Envelope Shapy/Cycle Control Register
-	attack : in std_logic;
-	-- From Envelope Shapy/Cycle Control Register
-	alternate : in std_logic;
-	-- From Envelope Shapy/Cycle Control Register
-	hold : in std_logic;
+	shape : in env_shape_t;
 	-- Envelope phase
 	env_phase : in env_phase_t;
 	-- Amplitude
@@ -71,7 +65,7 @@ begin
     -- Attack flips around the direction
     -- If alternate is set, directions switches every EP
     -- '0' is decaying, '1' is attacking
-    dir <= attack xor (eper0 and alternate);
+    dir <= shape.attack xor (eper0 and shape.alternate);
 
     -- Sawtooth amplitude
     sawamp <= env_phase(3 downto 0) when dir = '1'
@@ -79,14 +73,14 @@ begin
 
     -- If alternate is not set, hold last level, otherwise
     -- hold the reverse
-    holdlvl <= attack xor alternate;
+    holdlvl <= shape.attack xor shape.alternate;
 
     -- Hold amplitude
     holdamp <= "1111" when holdlvl = '1' else "0000";
 
     -- Current amplitude if in EP > 0
-    contamp <= "0000" when continue = '0' else
-	holdamp when hold = '1' else
+    contamp <= "0000" when shape.continue = '0' else
+	holdamp when shape.hold = '1' else
 	sawamp;
 
     -- Output amplitude

@@ -35,13 +35,7 @@ architecture test_env_shape_arch of test_env_shape is
     component env_shape is
 	port (
 	    -- From Envelope Shapy/Cycle Control Register
-	    continue : in std_logic;
-	    -- From Envelope Shapy/Cycle Control Register
-	    attack : in std_logic;
-	    -- From Envelope Shapy/Cycle Control Register
-	    alternate : in std_logic;
-	    -- From Envelope Shapy/Cycle Control Register
-	    hold : in std_logic;
+	    shape : in env_shape_t;
 	    -- Envelope phase
 	    env_phase : in env_phase_t;
 	    -- Amplitude
@@ -103,91 +97,101 @@ begin
     end process;
 
     e00xx : env_shape port map (
-	continue => '0',
-	attack => '0',
-	alternate => 'X',
-	hold => 'X',
+	shape =>
+	    (continue => '0',
+	    attack => '1',
+	    alternate => 'X',
+	    hold => 'X'),
 	env_phase => env_phase,
 	amp => out00xx
     );
 
     e01xx : env_shape port map (
-	continue => '0',
-	attack => '1',
-	alternate => 'X',
-	hold => 'X',
+	shape =>
+	    (continue => '0',
+	    attack => '1',
+	    alternate => 'X',
+	    hold => 'X'),
 	env_phase => env_phase,
 	amp => out01xx
     );
 
     e1000 : env_shape port map (
-	continue => '1',
-	attack => '0',
-	alternate => '0',
-	hold => '0',
+	shape =>
+	    (continue => '1',
+	    attack => '0',
+	    alternate => '0',
+	    hold => '0'),
 	env_phase => env_phase,
 	amp => out1000
     );
 
     e1001 : env_shape port map (
-	continue => '1',
-	attack => '0',
-	alternate => '0',
-	hold => '1',
+	shape =>
+	    (continue => '1',
+	    attack => '0',
+	    alternate => '0',
+	    hold => '1'),
 	env_phase => env_phase,
 	amp => out1001
     );
 
     e1010 : env_shape port map (
-	continue => '1',
-	attack => '0',
-	alternate => '1',
-	hold => '0',
+	shape =>
+	    (continue => '1',
+	    attack => '0',
+	    alternate => '1',
+	    hold => '0'),
 	env_phase => env_phase,
 	amp => out1010
     );
 
     e1011 : env_shape port map (
-	continue => '1',
-	attack => '0',
-	alternate => '1',
-	hold => '1',
+	shape =>
+	    (continue => '1',
+	    attack => '0',
+	    alternate => '1',
+	    hold => '1'),
 	env_phase => env_phase,
 	amp => out1011
     );
 
     e1100 : env_shape port map (
-	continue => '1',
-	attack => '1',
-	alternate => '0',
-	hold => '0',
+	shape =>
+	    (continue => '1',
+	    attack => '1',
+	    alternate => '0',
+	    hold => '0'),
 	env_phase => env_phase,
 	amp => out1100
     );
 
     e1101 : env_shape port map (
-	continue => '1',
-	attack => '1',
-	alternate => '0',
-	hold => '1',
+	shape =>
+	    (continue => '1',
+	    attack => '1',
+	    alternate => '0',
+	    hold => '1'),
 	env_phase => env_phase,
 	amp => out1101
     );
 
     e1110 : env_shape port map (
-	continue => '1',
-	attack => '1',
-	alternate => '1',
-	hold => '0',
+	shape =>
+	    (continue => '1',
+	    attack => '1',
+	    alternate => '1',
+	    hold => '0'),
 	env_phase => env_phase,
 	amp => out1110
     );
 
     e1111 : env_shape port map (
-	continue => '1',
-	attack => '1',
-	alternate => '1',
-	hold => '1',
+	shape =>
+	    (continue => '1',
+	    attack => '1',
+	    alternate => '1',
+	    hold => '1'),
 	env_phase => env_phase,
 	amp => out1111
     );
