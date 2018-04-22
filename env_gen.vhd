@@ -50,14 +50,14 @@ end env_gen;
 architecture env_gen_arch of env_gen is
     component env_shape is
 	port (
-    	    -- From Envelope Shapy/Cycle Control Register
-	    hold : in std_logic;
 	    -- From Envelope Shapy/Cycle Control Register
-	    alternate : in std_logic;
+	    continue : in std_logic;
 	    -- From Envelope Shapy/Cycle Control Register
 	    attack : in std_logic;
 	    -- From Envelope Shapy/Cycle Control Register
-	    continue : in std_logic;
+	    alternate : in std_logic;
+    	    -- From Envelope Shapy/Cycle Control Register
+	    hold : in std_logic;
 	    -- Envelope phase
 	    env_phase : in unsigned(5 downto 0);
 	    -- Amplitude
@@ -122,10 +122,10 @@ begin
     -- Generate envelope shape and send resulting amplitude to output
     eshape : env_shape port map (
 	-- Take hold/alternate/attack/continue from our input ports
-	hold => hold,
-	alternate => alternate,
-	attack => attack,
 	continue => continue,
+	attack => attack,
+	alternate => alternate,
+	hold => hold,
 	-- Take env_phase from the phase counter
 	env_phase => env_phase,
 	-- Pass amplitude to output

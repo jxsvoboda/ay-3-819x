@@ -23,6 +23,8 @@
 #
 
 GHDL = ghdl
+GHDL_FLAGS = -g
+
 sources_dep = \
 	amp_ctl.vhd \
 	bcdec.vhd \
@@ -35,19 +37,30 @@ sources_dep = \
 	regs.vhd \
 	tone_gen.vhd
 
+sources_test = \
+	test_env_shape.vhd
+
 sources = \
 	common.vhd \
-	$(sources_dep)
+	$(sources_dep) \
+	$(sources_test)
+
+units = \
+	test_env_shape
 
 objects_dep = $(sources_dep:.vhd=.o)
+objects_test = $(sources_test:.vhd=.o)
 objects = $(sources:.vhd=.o)
 
-all: $(objects)
+all: $(objects) $(units)
 
 %.o: %.vhd
-	$(GHDL) -a $<
+	$(GHDL) -a $(GHDL_FLAGS) $<
 
-$(objects_dep): common.o
+$(units): $(objects)
+	$(GHDL) -e $(GHDL_FLAGS) $@
+
+$(objects_dep) $(objects_test): common.o
 
 clean:
-	rm -f $(objects) work-obj93.cf
+	rm -f $(objects) $(units) work-obj93.cf

@@ -114,40 +114,40 @@ architecture psg_arch of psg is
 
     -- Channel A Envelope Period
     signal env_period_a : unsigned(15 downto 0);
-    -- Channel A Hold Envelope
-    signal hold_a : std_logic;
-    -- Channel A Alternate Envelope
-    signal alternate_a : std_logic;
-    -- Channel A Attack Envelope
-    signal attack_a : std_logic;
     -- Channel A Continue Envelope
     signal continue_a : std_logic;
+    -- Channel A Attack Envelope
+    signal attack_a : std_logic;
+    -- Channel A Alternate Envelope
+    signal alternate_a : std_logic;
+    -- Channel A Hold Envelope
+    signal hold_a : std_logic;
     -- Channel A Envelope
     signal env_a : unsigned(3 downto 0);
 
     -- Channel B Envelope Period
     signal env_period_b : unsigned(15 downto 0);
-    -- Channel B Hold Envelope
-    signal hold_b : std_logic;
-    -- Channel B Alternate Envelope
-    signal alternate_b : std_logic;
-    -- Channel B Attack Envelope
-    signal attack_b : std_logic;
     -- Channel B Continue Envelope
     signal continue_b : std_logic;
+    -- Channel B Attack Envelope
+    signal attack_b : std_logic;
+    -- Channel B Alternate Envelope
+    signal alternate_b : std_logic;
+    -- Channel B Hold Envelope
+    signal hold_b : std_logic;
     -- Channel B Envelope
     signal env_b : unsigned(3 downto 0);
 
     -- Channel C Envelope Period
     signal env_period_c : unsigned(15 downto 0);
-    -- Channel C Hold Envelope
-    signal hold_c : std_logic;
-    -- Channel C Alternate Envelope
-    signal alternate_c : std_logic;
-    -- Channel C Attack Envelope
-    signal attack_c : std_logic;
     -- Channel C Continue Envelope
     signal continue_c : std_logic;
+    -- Channel C Attack Envelope
+    signal attack_c : std_logic;
+    -- Channel C Alternate Envelope
+    signal alternate_c : std_logic;
+    -- Channel C Hold Envelope
+    signal hold_c : std_logic;
     -- Channel C Envelope
     signal env_c : unsigned(3 downto 0);
 
@@ -219,13 +219,13 @@ architecture psg_arch of psg is
 	    -- From Envelope Coarse/Fine Tune Registers
 	    env_period : in unsigned(15 downto 0);
 	    -- From Envelope Shapy/Cycle Control Register
-	    hold : in std_logic;
-	    -- From Envelope Shapy/Cycle Control Register
-	    alternate : in std_logic;
+	    continue : in std_logic;
 	    -- From Envelope Shapy/Cycle Control Register
 	    attack : in std_logic;
 	    -- From Envelope Shapy/Cycle Control Register
-	    continue : in std_logic;
+	    alternate : in std_logic;
+	    -- From Envelope Shapy/Cycle Control Register
+	    hold : in std_logic;
 	    -- To amplitude control
 	    output : out unsigned(3 downto 0)
 	);
@@ -378,10 +378,10 @@ begin
 	clock => clock,
 	reset => reset,
 	env_period => env_period_a,
-	hold => hold_a,
-	alternate => alternate_a,
-	attack => attack_a,
 	continue => continue_a,
+	attack => attack_a,
+	alternate => alternate_a,
+	hold => hold_a,
 	output => env_a
     );
 
@@ -389,10 +389,10 @@ begin
 	clock => clock,
 	reset => reset,
 	env_period => env_period_b,
-	hold => hold_b,
-	alternate => alternate_b,
-	attack => attack_b,
 	continue => continue_b,
+	attack => attack_b,
+	alternate => alternate_b,
+	hold => hold_b,
 	output => env_b
     );
 
@@ -400,10 +400,10 @@ begin
 	clock => clock,
 	reset => reset,
 	env_period => env_period_c,
-	hold => hold_c,
-	alternate => alternate_c,
-	attack => attack_c,
 	continue => continue_c,
+	attack => attack_c,
+	alternate => alternate_c,
+	hold => hold_c,
 	output => env_c
     );
 

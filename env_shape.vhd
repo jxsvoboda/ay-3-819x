@@ -29,13 +29,13 @@ use IEEE.numeric_std.all;
 entity env_shape is
     port (
 	-- From Envelope Shapy/Cycle Control Register
-	hold : in std_logic;
-	-- From Envelope Shapy/Cycle Control Register
-	alternate : in std_logic;
+	continue : in std_logic;
 	-- From Envelope Shapy/Cycle Control Register
 	attack : in std_logic;
 	-- From Envelope Shapy/Cycle Control Register
-	continue : in std_logic;
+	alternate : in std_logic;
+	-- From Envelope Shapy/Cycle Control Register
+	hold : in std_logic;
 	-- Envelope phase
 	env_phase : in unsigned(5 downto 0);
 	-- Amplitude
