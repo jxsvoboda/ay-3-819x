@@ -148,7 +148,7 @@ begin
 
     e1011 : env_shape port map (
 	continue => '1',
-	attack => '1',
+	attack => '0',
 	alternate => '1',
 	hold => '1',
 	env_phase => env_phase,

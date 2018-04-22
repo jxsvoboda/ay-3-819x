@@ -73,7 +73,7 @@ begin
     dir <= attack xor (eper0 and alternate);
 
     -- Sawtooth amplitude
-    sawamp <= env_phase(3 downto 0) when attack = '1'
+    sawamp <= env_phase(3 downto 0) when dir = '1'
 	else 15 - env_phase(3 downto 0);
 
     -- If alternate is not set, hold last level, otherwise
