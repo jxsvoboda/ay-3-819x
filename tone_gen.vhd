@@ -35,6 +35,8 @@ entity tone_gen is
 	reset : in std_logic;
 	-- From Coarse/Fine Tune Registers
 	tone_period : in tone_period_t;
+	-- Counter value (for debugging)
+	cnt : out tone_period_t;
 	-- To mixer
 	output : out std_logic
     );
@@ -53,36 +55,25 @@ begin
     process(clock, reset)
     begin
 	if reset = '1' then
+	    -- Reset
 	    prediv_cnt <= (others => '1');
+	    tone_cnt <= tone_period;
+	    tone_state <= '0';
 	elsif rising_edge(clock) then
-	    prediv_cnt <= prediv_cnt - 1;
-	end if;
-    end process;
-
-    -- Tone counting
-    process(clock, reset)
-    begin
-	if reset = '1' then
-	    tone_cnt <= (others => '1');
-	elsif rising_edge(clock) and prediv_cnt = 0 then
-	    if tone_cnt = 0 then
-		tone_cnt <= tone_period;
+	    if prediv_cnt > 0 then
+		prediv_cnt <= prediv_cnt - 1;
 	    else
-		tone_cnt <= tone_cnt - 1;
+		if tone_cnt > 0 then
+		    tone_cnt <= tone_cnt - 1;
+		else
+		    tone_cnt <= tone_period;
+		    tone_state <= not tone_state;
+		end if;
 	    end if;
 	end if;
     end process;
 
-    -- Tone generation
-    process(clock, reset)
-    begin
-	if reset = '1' then
-	    tone_state <= '0';
-	elsif rising_edge(clock) and tone_cnt = 0 then
-	    tone_state <= not tone_state;
-	end if;
-    end process;
-
     output <= tone_state;
+    cnt <= tone_cnt;
 
 end tone_gen_arch;

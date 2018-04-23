@@ -1,5 +1,5 @@
 --
--- AY-819x Noise Generator Test
+-- AY-819x Tone Generator Test
 --
 -- Copyright 2018 Jiri Svoboda
 --
@@ -28,20 +28,20 @@ use IEEE.numeric_std.all;
 use work.common.all;
 use std.textio.all;
 
-entity test_noise_gen is
-end test_noise_gen;
+entity test_tone_gen is
+end test_tone_gen;
 
-architecture test_noise_gen_arch of test_noise_gen is
-    component noise_gen is
+architecture test_tone_gen_arch of test_tone_gen is
+    component tone_gen is
 	port (
 	    -- Clock signal
 	    clock : in std_logic;
 	    -- Reset signal
 	    reset : in std_logic;
-	    -- From noise generator control register
-	    noise_period : in noise_period_t;
+	    -- From Coarse/Fine Tune Registers
+	    tone_period : in tone_period_t;
 	    -- Counter value (for debugging)
-	    cnt : out noise_period_t;
+	    cnt : out tone_period_t;
 	    -- To mixer
 	    output : out std_logic
 	);
@@ -49,10 +49,10 @@ architecture test_noise_gen_arch of test_noise_gen is
 
     signal clock : std_logic;
     signal reset : std_logic;
-    signal noise_period : noise_period_t;
+    signal tone_period : tone_period_t;
     signal outp : std_logic;
     signal cnt : integer;
-    signal ncnt : noise_period_t;
+    signal tcnt : tone_period_t;
 
 begin
 
@@ -62,7 +62,7 @@ begin
     begin
 	reset <= '1';
 	clock <= '0';
-	noise_period <= "00001";
+	tone_period <= "000000000010";
 
 	wait for 100 ns;
 	reset <= '0';
@@ -76,7 +76,7 @@ begin
 	    if cnt mod 16 = 0 then
 		write (l, cnt);
 		write (l, String'(": ("));
-		write (l, to_integer(ncnt));
+		write (l, to_integer(tcnt));
 		write (l, String'(") "));
 	    end if;
 
@@ -100,13 +100,13 @@ begin
 	end loop;
     end process;
 
-    ng : noise_gen port map (
+    tg : tone_gen port map (
 	clock => clock,
 	reset => reset,
-	noise_period => noise_period,
-	cnt => ncnt,
+	tone_period => tone_period,
+	cnt => tcnt,
 	output => outp
     );
 
 
-end test_noise_gen_arch;
+end test_tone_gen_arch;

@@ -39,7 +39,8 @@ sources_dep = \
 
 sources_test = \
 	test_env_shape.vhd \
-	test_noise_gen.vhd
+	test_noise_gen.vhd \
+	test_tone_gen.vhd
 
 sources = \
 	common.vhd \
@@ -48,10 +49,12 @@ sources = \
 
 units = \
 	test_env_shape \
-	test_noise_gen
+	test_noise_gen \
+	test_tone_gen
 
 objects_dep = $(sources_dep:.vhd=.o)
 objects_test = $(sources_test:.vhd=.o)
+e_objects = $(addprefix e~,$(objects_test))
 objects = $(sources:.vhd=.o)
 
 all: $(objects) $(units)
@@ -65,4 +68,4 @@ $(units): $(objects)
 $(objects_dep) $(objects_test): common.o
 
 clean:
-	rm -f $(objects) $(units) work-obj93.cf
+	rm -f $(objects) $(e_objects) $(units) work-obj93.cf
