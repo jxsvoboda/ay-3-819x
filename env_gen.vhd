@@ -37,6 +37,8 @@ entity env_gen is
 	env_period : in env_period_t;
 	-- From Envelope Shapy/Cycle Control Register
 	shape : in env_shape_t;
+	-- Counter value (for debugging)
+	cnt : out env_period_t;
 	-- To amplitude control
 	output : out amp_lvl_t
     );
@@ -62,49 +64,39 @@ architecture env_gen_arch of env_gen is
     signal env_phase : env_phase_t;
 begin
 
-    -- Pre-division counting
     process(clock, reset)
+	variable next_phase : env_phase_t;
+        -- Next envelope period
+	variable next_p : unsigned(1 downto 0);
     begin
 	if reset = '1' then
 	    prediv_cnt <= (others => '1');
-	elsif rising_edge(clock) then
-	    prediv_cnt <= prediv_cnt - 1;
-	end if;
-    end process;
-
-    -- Envelope counting
-    process(clock, reset)
-    begin
-	if reset = '1' then
-	    env_cnt <= (others => '1');
-	elsif rising_edge(clock) and prediv_cnt = 0 then
-	    if env_cnt = 0 then
-		env_cnt <= env_period;
-	    else
-		env_cnt <= env_cnt - 1;
-	    end if;
-	end if;
-    end process;
-
-    -- Envelope phase counting
-    process(clock, reset)
-	variable next_phase : env_phase_t;
-    begin
-	if reset = '1' then
+	    env_cnt <= env_period;
 	    env_phase <= (others => '0');
-	elsif rising_edge(clock) and env_cnt = 0 then
-	    next_phase := env_phase + 1;
-	    env_phase(3 downto 0) <= next_phase(3 downto 0);
-	    case next_phase(5 downto 4) is
-		when "00" =>
-		    env_phase(5 downto 4) <= "01";
-		when "01" =>
-		    env_phase(5 downto 4) <= "10";
-		when "10" =>
-		    env_phase(5 downto 4) <= "01";
-		when others =>
-		    env_phase(5 downto 4) <= "XX";
-	    end case;
+	elsif rising_edge(clock) then
+	    if prediv_cnt > 0 then
+		prediv_cnt <= prediv_cnt - 1;
+	    else
+		prediv_cnt <= (others => '1');
+		if env_cnt > 0 then
+		    env_cnt <= env_cnt - 1;
+		else
+		    env_cnt <= env_period;
+		    case env_phase(5 downto 4) is
+			when "00" =>
+			    next_p := "01";
+			when "01" =>
+			    next_p := "10";
+			when "10" =>
+			    next_p := "01";
+			when others =>
+			    next_p := "XX";
+		    end case;
+
+		    next_phase := env_phase + 1;
+		    env_phase <= next_p & next_phase(3 downto 0);
+		end if;
+	    end if;
 	end if;
     end process;
 
@@ -117,5 +109,7 @@ begin
 	-- Pass amplitude to output
 	amp => output
     );
+
+    cnt <= env_cnt;
 
 end env_gen_arch;

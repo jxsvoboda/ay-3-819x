@@ -38,6 +38,7 @@ sources_dep = \
 	tone_gen.vhd
 
 sources_test = \
+	test_env_gen.vhd \
 	test_env_shape.vhd \
 	test_noise_gen.vhd \
 	test_tone_gen.vhd
@@ -48,6 +49,7 @@ sources = \
 	$(sources_test)
 
 units = \
+	test_env_gen \
 	test_env_shape \
 	test_noise_gen \
 	test_tone_gen

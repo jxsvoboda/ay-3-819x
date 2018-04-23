@@ -216,6 +216,8 @@ architecture psg_arch of psg is
 	    reset : in std_logic;
 	    -- From noise generator control register
 	    noise_period : in noise_period_t;
+	    -- Counter value (for debugging)
+	    cnt : out noise_period_t;
 	    -- To mixer
 	    output : out std_logic
 	);
@@ -297,6 +299,8 @@ architecture psg_arch of psg is
 	    reset : in std_logic;
 	    -- From Coarse/Fine Tune Registers
 	    tone_period : in tone_period_t;
+	    -- Counter value (for debugging)
+	    cnt : out tone_period_t;
 	    -- To mixer
 	    output : out std_logic
 	);
