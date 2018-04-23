@@ -1,3 +1,4 @@
 *.o
 test_env_shape
+test_noise_gen
 work-obj93.cf

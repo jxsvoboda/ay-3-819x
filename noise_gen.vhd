@@ -35,6 +35,8 @@ entity noise_gen is
 	reset : in std_logic;
 	-- From noise generator control register
 	noise_period : in noise_period_t;
+	-- Counter value (for debugging)
+	cnt : out noise_period_t;
 	-- To mixer
 	output : out std_logic
     );
@@ -51,44 +53,34 @@ begin
 
     -- Pre-division counting
     process(clock, reset)
-    begin
-	if reset = '1' then
-	    prediv_cnt <= (others => '1');
-	elsif rising_edge(clock) then
-	    prediv_cnt <= prediv_cnt - 1;
-	end if;
-    end process;
-
-    -- Noise counting
-    process(clock, reset)
-    begin
-	if reset = '1' then
-	    noise_cnt <= (others => '1');
-	elsif rising_edge(clock) and prediv_cnt = 0 then
-	    if noise_cnt = 0 then
-		noise_cnt <= noise_period;
-	    else
-		noise_cnt <= noise_cnt - 1;
-	    end if;
-	end if;
-    end process;
-
-    -- Noise LFSR
-    process(clock, reset)
         -- LFSR output
 	variable b: std_logic;
     begin
 	if reset = '1' then
+	    prediv_cnt <= (others => '1');
+	    noise_cnt <= noise_period;
 	    lfsr <= (others => '1');
-	elsif rising_edge(clock) and noise_cnt = 0 then
-	    -- A 16-bit Fibonacci LFSR
-	    -- (per https://en.wikipedia.org/wiki/Linear-feedback_shift_register)
-	    b := lfsr(11) xor lfsr(13) xor lfsr(14) xor lfsr(16);
-	    lfsr <= b & lfsr(1 to 15);
+	elsif rising_edge(clock) then
+	    if prediv_cnt > 0 then
+		prediv_cnt <= prediv_cnt - 1;
+	    else
+		prediv_cnt <= (others => '1');
+
+		if noise_cnt > 0 then
+		    noise_cnt <= noise_cnt - 1;
+		else
+		    noise_cnt <= noise_period;
+
+		    -- A 16-bit Fibonacci LFSR
+		    -- (per https://en.wikipedia.org/wiki/Linear-feedback_shift_register)
+		    b := lfsr(11) xor lfsr(13) xor lfsr(14) xor lfsr(16);
+		    lfsr <= b & lfsr(1 to 15);
+		end if;
+	    end if;
 	end if;
 
         output <= b;
+        cnt <= noise_cnt;
     end process;
-
 
 end noise_gen_arch;
